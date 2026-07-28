@@ -5,7 +5,8 @@ VENV := .venv
 
 
 install:
-	$(PYTHON) -m pip install --index-url https://pypi.org/simple -e ".[dev]"
+	cd llm_sdk && $(PYTHON) -m uv run
+	
 
 run:
 	$(PYTHON) call_me_maybe.py
