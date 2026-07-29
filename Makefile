@@ -2,11 +2,10 @@ PYTHON := python3
 
 TEMP := __pycache__ .mypy_cache
 VENV := .venv
-
+SRC = src
 
 install:
-	cd llm_sdk && $(PYTHON) -m uv run
-	
+	uv sync
 
 run:
 	$(PYTHON) call_me_maybe.py
@@ -21,7 +20,7 @@ lint:
 	$(PYTHON) -m flake8 $(SRC)
 	mypy . --warn-return-any --warn-unused-ignores \
 	--ignore-missing-imports --disallow-untyped-defs \
-	--check-untyped-defs
+	--check-untyped-defs $(SRC)
 
 lint-strict:
 	flake8 $(SRC)
