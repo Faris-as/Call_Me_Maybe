@@ -1,24 +1,30 @@
 # Pydantic for the model
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Any
 from enum import Enum
 
 
-class _type(Enum):
-    string = str
-    number = int | float
+class ParamType(str, Enum):
+    string = "string"
+    number = "number"
 
 
 class ParameterSpec(BaseModel):
-    type: _type
+    type: ParamType
 
 
 class FunctionDefinition(BaseModel):
-    name: str = Field(..., min_length=5, max_length=100)
+    name: str = Field(...)
     description: str = Field(..., min_length=5, max_length=500)
     parameters: dict[str, ParameterSpec]
     returns: ParameterSpec
 
 
 class PromptEntry(BaseModel):
-    
+    prompt: str
+
+
+class FunctionCallResult(BaseModel):
+    prompt: str
+    name: str = Field(..., min_length=5, max_length=100)
+    parameters: dict[str, Any]
