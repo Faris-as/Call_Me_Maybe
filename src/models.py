@@ -1,5 +1,5 @@
 # Pydantic for the model
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Any
 from enum import Enum
 
@@ -7,24 +7,32 @@ from enum import Enum
 class ParamType(str, Enum):
     string = "string"
     number = "number"
-
+    integer = "integer"
+    boolean = "boolean"
 
 class ParameterSpec(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     type: ParamType
 
 
 class FunctionDefinition(BaseModel):
-    name: str = Field(...)
-    description: str = Field(..., min_length=5, max_length=500)
-    parameters: dict[str, ParameterSpec]
-    returns: ParameterSpec
+
+    model_config = ConfigDict(extra="ignore")
+    name: str = Field(min_length=1)
+    description: str = ""
+    parameters: dict[str, ParameterSpec] = Field(default_factory=dict)
+    returns: ParameterSpec | None = None
 
 
 class PromptEntry(BaseModel):
+    
+    model_config = ConfigDict(extra="ignore")
     prompt: str
 
 
 class FunctionCallResult(BaseModel):
+
+    model_config = ConfigDict(extra="ignore")
     prompt: str
-    name: str = Field(..., min_length=5, max_length=100)
+    name: str
     parameters: dict[str, Any]
